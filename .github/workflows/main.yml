@@ -15,8 +15,22 @@ jobs:
         java-version: '11'
         distribution: 'ubuntu-latest'
         cache: gradle
+    - name: Download tools
+      run: wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+      run: unzip commandlinetools-linux-11076708_latest.zip
+      run: export ANDROID_HOME=$PWD/cmdline-tools/
+      run: $ANDROID_HOME/bin/sdkmanager --sdk_root=$ANDROID_HOME --licenses
+      run: ./make.sh rename myexample
+      run: ./make.sh url https://github.com/Jipok
+      run: ./make.sh apk
+    #- name: Grant execute permission for gradlew
+    #  run: chmod +x gradlew
+    #- name: Build with Gradle
+    #  run: ./gradlew build
+    - uses: actions/upload-artifact@v3
+      with:
+        name: my-artifact
+        path: /home/runner/work/website-to-apk-action/website-to-apk-action/
+    - name: Download all workflow run artifacts
+      uses: actions/download-artifact@v3
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    - name: Build with Gradle
-      run: ./gradlew build
